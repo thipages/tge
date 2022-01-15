@@ -1,3 +1,3 @@
-# tge - tiny game engine
+# timed-canvas
 
 see example folder for usage
