@@ -1,4 +1,5 @@
 import controller from './../esm/index.js'
+import {grid} from './grid.js'
 controller(
   document.getElementsByTagName('canvas')[0],
   {
@@ -15,11 +16,17 @@ controller(
     },
   }),
   (ctx,m)=>{
-    ctx.strokeStyle="green";
+
+    ctx.strokeStyle='black';
+    ctx.lineWidth=1;
+    grid(ctx)(200,200,20, 200,100);
+    //
+    ctx.strokeStyle="blue";
     ctx.fillStyle="orange";
-    ctx.lineWidth=5;
+    ctx.lineWidth=10;
     ctx.rect(m.x,m.y,m.w,m.h);
     ctx.fill();
     ctx.stroke();
+
   }
 );
