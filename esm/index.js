@@ -16,7 +16,7 @@ const registerEvents= (allEvents)=> Object.entries(allEvents).forEach(
     if (k!==T) document.addEventListener(k,e=>v(e));
   }
 );
-export default (canvas, model, events,view)=>{
+export default (canvas, model, events,view,autoClearing=true)=>{
   // Update model with _bounds property (canvas size)
   model._bounds=[0,0,canvas.width,canvas.height];
   const ctx=canvas.getContext("2d");
@@ -24,8 +24,10 @@ export default (canvas, model, events,view)=>{
   if (!mEvents[T]) mEvents[T]=()=>{};
   registerEvents(mEvents);
   timer((diff,total)=> {
-    ctx.clearRect(...model._bounds);
-    ctx.beginPath();
+    if (autoClearing) {
+      ctx.clearRect(...model._bounds);
+      ctx.beginPath();
+    }
     mEvents[T](diff,total);
     view(ctx,model);
   });
