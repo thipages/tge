@@ -15,7 +15,6 @@ export default[
       constraints(m)
     },
     keydown:function (e) {
-      //accelerate(m,1.5);
       if (m.x===m.dir[0] && m.y===m.dir[1]) return;
       changeDir(m,e.key);
     }
@@ -39,15 +38,12 @@ const constraints=(m)=> {
   }
 
 };
-const accelerate=(m,a)=>{
-  //m.acceleration=m.dir.map(v=>v°a);
-}
 const changeDir=(m,key) =>{
   const p = arrow2point(key);
   m.dir[0]=p[0];
   m.dir[1]=p[1];
 };
 const move= (m)=> {
-  m.x += m.dir[0]*m.speed*m.acceleration[0];
-  m.y += m.dir[1]*m.speed*m.acceleration[1];
+  m.x += m.dir[0]*m.speed;
+  m.y += m.dir[1]*m.speed;
 };
