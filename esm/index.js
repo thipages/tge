@@ -19,20 +19,20 @@ const registerEvents= (allEvents)=> Object.entries(allEvents).forEach(
     if (k!==T) document.addEventListener(k,e=>v(e));
   }
 );
-export default (canvas, model, events,view,autoClearing=true)=>{
+export default (canvas, model, modelRelated,autoClearing=true)=>{
   // Add _bounds property (canvas size) to model
   model._bounds=[0,0,canvas.width,canvas.height];
   const ctx=canvas.getContext("2d");
-  const mEvents=events(model);
-  if (!mEvents[T]) mEvents[T]=()=>{};
-  registerEvents(mEvents);
+  const mr=modelRelated(model);
+  if (!mr[T]) mr[T]=()=>({view:()=>{}});
+  registerEvents(mr);
   const t=timer((diff,total)=> {
     if (autoClearing) {
       ctx.clearRect(...model._bounds);
       ctx.beginPath();
     }
-    mEvents[T](diff,total);
-    view(ctx,model);
+    mr[T](diff,total);
+    mr.view(ctx);
   });
   return {
     alternate:()=>{t.alternate();}
