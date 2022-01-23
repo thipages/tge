@@ -12,20 +12,18 @@ const timer= (callback)=>{
     alternate:()=>{_started=!_started;total=0;}
   }
 };
-// todo : manage removeEventListener
+// todo : removeEventListener
 const T='tick';
-const registerEvents= (allEvents)=> Object.entries(allEvents).forEach(
+const registerEvents= (allEvents,register)=> Object.entries(allEvents).forEach(
   ([k,v])=>{
-    if (k!==T) document.addEventListener(k,e=>v(e));
+    if (k!==T) {
+      const vv= e=>v(e);
+      if (register) document.addEventListener(k,vv);
+      else document.removeEventListener(k,vv);
+    }
   }
 );
 export default (canvas, model, modelRelated,autoClearing=true)=>{
-  // Add _bounds property (canvas size) to model
-  model._bounds=[0,0,canvas.width,canvas.height];
-  const ctx=canvas.getContext("2d");
-  const mr=modelRelated(model);
-  if (!mr[T]) mr[T]=()=>({view:()=>{}});
-  registerEvents(mr);
   const t=timer((diff,total)=> {
     if (autoClearing) {
       ctx.clearRect(...model._bounds);
@@ -34,7 +32,14 @@ export default (canvas, model, modelRelated,autoClearing=true)=>{
     mr[T](diff,total);
     mr.view(ctx);
   });
+  // Add _bounds property (canvas size) to model
+  model._bounds=[0,0,canvas.width,canvas.height];
+  const ctx=canvas.getContext("2d");
+  const mr=modelRelated(model);
+  if (!mr[T]) mr[T]=()=>({view:()=>{}});
+  registerEvents(mr,true);
+  let ongoing=true;
   return {
-    alternate:()=>{t.alternate();}
+    alternate:()=>{t.alternate();ongoing=!ongoing;registerEvents(mr,ongoing);}
   }
 };
