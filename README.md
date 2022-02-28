@@ -4,7 +4,7 @@
     import controller from './../esm/index.js';
     const canvas=document.getElementsByTagName('canvas')[0];
     const model={};
-    const tc=controller(
+    controller(
       canvas,
       model,
       model=>({
