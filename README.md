@@ -1,16 +1,25 @@
 # timed-canvas
 
 ```javascript
+    import controller from './../esm/index.js';
     const canvas=document.getElementsByTagName('canvas')[0];
+    const model={};
     const tc=controller(
-      canvas, /* Canvas DOM element */
-      model, /*Model definition*/
+      canvas,
+      model,
       model=>({
-        view:(context)=>{/* Context access-Required */},
-        tick: (elapsed, total) => {/* Elapsed/total time(ms) access-Required */},
-        keydown :e=>{/* Event access-Optional  */}
+        view:(context)=>{
+          
+        },
+        tick: (elapsed_ms, total_ms) => {
+          
+        },
+        onkeydown :e=>{
+          
+        }
       })
     );
 ```
+`model._dimension stores the canvas dimension as an array [width,height]` 
 
-see example folder
+see test folder

@@ -8,38 +8,34 @@ const timer= (callback)=>{
     if (_started) requestAnimationFrame(start);
   };
   requestAnimationFrame(start)
-  return {
-    alternate:()=>{_started=!_started;total=0;}
-  }
 };
-// todo : removeEventListener
 const T='tick';
+const V='view';
 const registerEvents= (allEvents,register)=> Object.entries(allEvents).forEach(
   ([k,v])=>{
-    if (k!==T) {
-      const vv= e=>v(e);
-      if (register) document.addEventListener(k,vv);
-      else document.removeEventListener(k,vv);
-    }
+      const handler= e=>v(e);
+      if (register) document.addEventListener(k,handler);
+      else document.removeEventListener(k,handler);
   }
 );
-export default (canvas, model, modelRelated,autoClearing=true)=>{
-  const t=timer((diff,total)=> {
+export default (canvas, model, engine,autoClearing=true)=>{
+  timer((diff,total)=> {
     if (autoClearing) {
-      ctx.clearRect(...model._bounds);
+      ctx.clearRect(0,0,...model._dimension);
       ctx.beginPath();
     }
     mr[T](diff,total);
-    mr.view(ctx);
+    mr[V](ctx);
   });
-  // Add _bounds property (canvas size) to model
-  model._bounds=[0,0,canvas.width,canvas.height];
+  // Add _dimension property (canvas dimension) to model
+  model._dimension=[canvas.width,canvas.height];
   const ctx=canvas.getContext("2d");
-  const mr=modelRelated(model);
-  if (!mr[T]) mr[T]=()=>({view:()=>{}});
-  registerEvents(mr,true);
-  let ongoing=true;
-  return {
-    alternate:()=>{t.alternate();ongoing=!ongoing;registerEvents(mr,ongoing);}
-  }
+  const mr=engine(model);
+  const events=Object.keys(mr)
+    .filter(v=>v.substring(0,2)==='on')
+    .reduce((acc,v)=>{
+      acc[v.substring(2)]=mr[v];
+      return acc;
+    },{});
+  registerEvents(events,true);
 };
