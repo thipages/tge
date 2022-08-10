@@ -1,0 +1,23 @@
+{
+  "name": "timed-canvas",
+  "version": "1.0.0",
+  "description": "```javascript\r     import controller from './../esm/index.js';\r     const canvas=document.getElementsByTagName('canvas')[0];\r     const model={};\r     controller(\r       canvas,\r       model,\r       model=>({\r         view:(context)=>{",
+  "main": "esm.index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thipages/timed-canvas.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thipages/timed-canvas/issues"
+  },
+  "homepage": "https://github.com/thipages/timed-canvas#readme"
+}
